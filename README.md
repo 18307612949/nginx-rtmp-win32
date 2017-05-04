@@ -49,10 +49,10 @@ NodeMedia使用独家优化的转码技术,直接内置于nginx服务内.实现�
     live on;
     
     transcode on;           #转码开关
-	   transcode_appname hls;  #转码后的 app name
-	   transcode_ar 44100;     #转码后的采样率
-	   transcode_ab 128000;    #转码后的比特率
-	   transcode_ac 1;         #转码后的声道数
+    transcode_appname hls;  #转码后的 app name
+    transcode_ar 44100;     #转码后的采样率
+    transcode_ab 128000;    #转码后的比特率
+    transcode_ac 1;         #转码后的声道数
 }
 
 
