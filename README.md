@@ -44,6 +44,19 @@ nginx-rtmp-module在Linux平台支持exec来调用ffmpeg进行实时转码.windo
 不过即使是使用ffmpeg转码,其实也存在很大的延迟,这是由于ffmpeg打开直播型输入流时需要花很多时间去做分析.  
 NodeMedia使用独家优化的转码技术,直接内置于nginx服务内.实现了不限平台的实时转码实现.  
 目前第一版,支持任意音频编码转码为AAC,可控制转码后的采样率,声道,比特率.  
+```
+ application live {
+    live on;
+    
+    transcode on;           #转码开关
+	   transcode_appname hls;  #转码后的 app name
+	   transcode_ar 44100;     #转码后的采样率
+	   transcode_ab 128000;    #转码后的比特率
+	   transcode_ac 1;         #转码后的声道数
+}
+
+
+```
 ## 后续版本或将增加
  * 实时视频转码
  * NVENC/NVDEC/Intel QSV加速
