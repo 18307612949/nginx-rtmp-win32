@@ -39,6 +39,16 @@ HTTP监听 8080 端口，
 * :8080/index.html 为一个直播播放与直播发布测试器
 * :8080/vod.html 为一个支持RTMP和HLS点播的测试器
 
+# 实时转码
+nginx-rtmp-module在Linux平台支持exec来调用ffmpeg进行实时转码.windows平台由于原作者没有去实现所以不支持exec.  
+不过即使是使用ffmpeg转码,其实也存在很大的延迟,这是由于ffmpeg打开直播型输入流时需要花很多时间去做分析.  
+NodeMedia使用独家优化的转码技术,直接内置于nginx服务内.实现了不限平台的实时转码实现.    
+目前第一版,支持任意音频编码转码为AAC,可控制转码后的采样率,声道,比特率.  
+## 后续版本或将增加
+ * 实时视频转码
+ * NVENC/NVDEC/Intel QSV加速
+ * 多分辨率输出
+
 # 播放防盗链与推流鉴权
 ## 加密 URL 构成:
 >rtmp://域名/业务名/流名?sign=失效时间戳-HashValue  
