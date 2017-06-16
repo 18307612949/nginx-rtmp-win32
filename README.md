@@ -46,8 +46,8 @@ HTTP监听 8080 端口，
 # 实时转码
 nginx-rtmp-module在Linux平台支持exec来调用ffmpeg进行实时转码.windows平台由于原作者没有去实现所以不支持exec.  
 不过即使是使用ffmpeg转码,其实也存在很大的延迟,这是由于ffmpeg打开直播型输入流时需要花很多时间去做分析.  
-NodeMedia使用独家优化的转码技术,直接内置于nginx服务内.实现了不限平台的实时转码实现.  
-目前第一版,支持任意音频编码转码为AAC,可控制转码后的采样率,声道,比特率.  
+NodeMedia使用独家优化的转码技术,直接内置于nginx服务内.实现了不限平台的实时转码实现(Linux版后期提供).  
+目前第一版,支持任意音频编码转码为AAC,可控制转码后的采样率,声道,比特率.主要用于当使用Flash作为推流端时,只能使用SPEEX和NELLYMOSER编码,无法为HLS提供音频流的缺陷.  
 
 ```
  application live {
