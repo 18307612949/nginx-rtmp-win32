@@ -1,7 +1,7 @@
 nginx-rtmp-win32
 ================
 
-Nginx: 1.11.10  
+Nginx: 1.12.0
 Nginx-Rtmp-Module: 1.1.11  
 openssl-1.1.0e  
 pcre-8.40  
@@ -9,7 +9,7 @@ zlib-1.2.10
 
 # configure arguments
 ```
-nginx version: nginx/1.11.10
+nginx version: nginx/1.12.0
 built by cl
 built with OpenSSL 1.1.0e  16 Feb 2017
 TLS SNI support enabled
@@ -31,6 +31,7 @@ eam_ssl_module --with-ipv6 --add-module=../nginx-rtmp-module
 
 # 使用方法
 双击nginx.exe
+
 # 简要说明
 conf/nginx.conf 为配置文件实例  
 RTMP监听 1935 端口，启用live 和hls 两个application  
@@ -39,11 +40,15 @@ HTTP监听 8080 端口，
 * :8080/index.html 为一个直播播放与直播发布测试器
 * :8080/vod.html 为一个支持RTMP和HLS点播的测试器
 
+# H.265
+支持ID为12的H.265直播流
+
 # 实时转码
 nginx-rtmp-module在Linux平台支持exec来调用ffmpeg进行实时转码.windows平台由于原作者没有去实现所以不支持exec.  
 不过即使是使用ffmpeg转码,其实也存在很大的延迟,这是由于ffmpeg打开直播型输入流时需要花很多时间去做分析.  
 NodeMedia使用独家优化的转码技术,直接内置于nginx服务内.实现了不限平台的实时转码实现.  
 目前第一版,支持任意音频编码转码为AAC,可控制转码后的采样率,声道,比特率.  
+
 ```
  application live {
     live on;
@@ -61,6 +66,7 @@ NodeMedia使用独家优化的转码技术,直接内置于nginx服务内.实现�
  * 实时视频转码
  * NVENC/NVDEC/Intel QSV加速
  * 多分辨率输出
+ * H.264 -> H.265 转码
 
 # 播放防盗链与推流鉴权
 ## 加密 URL 构成:
@@ -81,7 +87,7 @@ NodeMedia使用独家优化的转码技术,直接内置于nginx服务内.实现�
 
 5.最终请求地址  
 >rtmp://192.168.0.10/live/stream123?sign=1490235000-d03af0812548d315279936ad76f912be  
->sign关键字不能修改
+>sign关键字不能修改  
 
 ## nginx.conf 鉴权配置说明
 ```
@@ -93,6 +99,7 @@ NodeMedia使用独家优化的转码技术,直接内置于nginx服务内.实现�
 ```
 ## 安全URL的产生  
 应该由业务服务器生成安全的URL,防止在客户端泄漏key.可参考auth_gen.php
+
 
 # 注意
 不支持exec
