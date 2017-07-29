@@ -1,6 +1,6 @@
 nginx-rtmp-win32
 ================
-NMS分支为功能加强版，如需使用原版，请切换master分支
+NMS分支为功能加强版，如需使用原版，请切换master分支。新版本NMS不再使用visual c++编译，改为MSYS2 & MinGW-W64编译。
 
 * Nginx: 1.13.3  
 * Nginx-Rtmp-Module: 1.2.0  
@@ -33,7 +33,7 @@ HTTP监听 8080 端口，
 RTMP支持ID为12的H.265直播流
 
 ## 低延迟实时转码
-原版Rtmp-Module不支持Windows下exec调用，NMS版本嵌入ffmpeg，直接传入ffmpeg指令进行转码
+原版Rtmp-Module不支持Windows下exec调用，NMS版嵌入ffmpeg，直接传入ffmpeg指令进行转码
 * 支持使用$app,$name变量
 * 转码后可以输出到本app
 * 支持多路输出
@@ -82,6 +82,13 @@ RTMP支持ID为12的H.265直播流
 ## 安全URL的产生  
 应该由业务服务器生成安全的URL,防止在客户端泄漏key.可参考auth_gen.php
 
+## 后续版本或将增加
+* static_transcode 可用于输入RTSP摄像头数据流转RTMP流
+* flv文件保持后调用内置ffmpeg转换为MP4文件格式并添加faststart标识
+* 精简ffmpeg编解码器，减小程序体积 
+* NMS的Linux版
+* 64位版，经测试视频编码器性能更强
+* 你提
 
 ## 注意
 不支持exec
