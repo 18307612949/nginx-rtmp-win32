@@ -37,9 +37,10 @@ RTMP支持ID为12的H.265直播流
 * 支持使用$app,$name变量
 * 转码后可以输出到本app
 * 支持多路输出
-* 支持qsv,cuvid硬解码
+* 支持qsv,cuvid硬解码(cuvid硬解码没有会话数限制)
 * 支持qsv,nvenc硬编码(nvenc硬编码会话数受限于显卡型号，一般GeForce家用显卡最多支持2路)
 * 支持转码为H.265 RTMP流，需客户端支持,ID为12
+
 ```
  application live {
     live on;
