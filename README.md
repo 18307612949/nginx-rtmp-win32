@@ -84,7 +84,7 @@ RTMP支持ID为12的H.265直播流
 
 ## 后续版本或将增加
 * static_transcode 可用于输入RTSP摄像头数据流转RTMP流
-* flv文件保持后调用内置ffmpeg转换为MP4文件格式并添加faststart标识
+* flv文件录制后调用内置ffmpeg转换为MP4文件格式并添加faststart标识
 * 精简ffmpeg编解码器，减小程序体积 
 * NMS的Linux版
 * 64位版，经测试视频编码器性能更强
