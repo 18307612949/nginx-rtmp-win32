@@ -42,6 +42,7 @@ RTMP支持ID为12的H.265直播流
 * 支持转码为H.265 RTMP流，需客户端支持,ID为12
 
 ```
+#视频流不变，音频转为AAC编码，一般用于Flash推流，转码后与原视频流100ms左右延迟
  application live {
     live on;
     
@@ -49,6 +50,23 @@ RTMP支持ID为12的H.265直播流
 }
 ```
 
+```
+#音频流不变，视频流实时转为多路分辨率，用于大专小，一转多
+ application live {
+    live on;
+    
+    transcode "-i rtmp://127.0.0.1/$app/$name -c:a copy -c:v libx264 -preset superfast -tune zerolatency -g 30 -s 1280x720 -f flv rtmp://127.0.0.1/$app/$name_720 -c:a copy -c:v libx264 -preset superfast -tune zerolatency -g 30 -s 854x480 -f flv rtmp://127.0.0.1/$app/$name_480 -c:a copy -c:v libx264 -preset superfast -tune zerolatency -g 30 -s 640x360 -f flv rtmp://127.0.0.1/$app/$name_360";
+}
+```
+
+```
+#音频流不变，视频流实时转为多路分辨率，用于大专小，一转多,使用NV显卡加速解码减轻CPU负担
+ application live {
+    live on;
+    
+    transcode "-vcodec h264_cuvid -i rtmp://127.0.0.1/$app/$name -c:a copy -c:v libx264 -preset superfast -tune zerolatency -g 30 -s 1280x720 -f flv rtmp://127.0.0.1/$app/$name_720 -c:a copy -c:v libx264 -preset superfast -tune zerolatency -g 30 -s 854x480 -f flv rtmp://127.0.0.1/$app/$name_480 -c:a copy -c:v libx264 -preset superfast -tune zerolatency -g 30 -s 640x360 -f flv rtmp://127.0.0.1/$app/$name_360";
+}
+```
 
 ## 播放防盗链与推流鉴权
 ### 加密 URL 构成:
@@ -88,6 +106,7 @@ RTMP支持ID为12的H.265直播流
 * 精简ffmpeg编解码器，减小程序体积 
 * NMS的Linux版
 * 64位版，经测试视频编码器性能更强
+* npp加速的视频缩放滤镜 
 * 你提
 
 ## 注意
