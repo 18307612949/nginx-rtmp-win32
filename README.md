@@ -1,32 +1,21 @@
 nginx-rtmp-win32
 ================
+NMS分支为功能加强版，如需使用原版，请切换master分支
 
-Nginx: 1.12.0  
-Nginx-Rtmp-Module: 1.1.11  
-openssl-1.1.0e  
-pcre-8.40  
-zlib-1.2.10
+* Nginx: 1.13.3  
+* Nginx-Rtmp-Module: 1.2.0  
+* openssl-1.0.2l  
+* pcre-8.41  
+* zlib-1.2.11  
+* ffmpeg-3.3.2  
 
 ## configure arguments
 ```
-nginx version: nginx/1.12.0
-built by cl
-built with OpenSSL 1.1.0e  16 Feb 2017
+nginx version: nginx/1.13.3
+built by gcc 7.1.0 (Rev2, Built by MSYS2 project)
+built with OpenSSL 1.0.2l  25 May 2017
 TLS SNI support enabled
-configure arguments: --with-cc=cl --builddir=objs --with-debug --prefix= --conf-
-path=conf/nginx.conf --pid-path=logs/nginx.pid --http-log-path=logs/access.log -
--error-log-path=logs/error.log --sbin-path=nginx.exe --http-client-body-temp-pat
-h=temp/client_body_temp --http-proxy-temp-path=temp/proxy_temp --http-fastcgi-te
-mp-path=temp/fastcgi_temp --http-scgi-temp-path=temp/scgi_temp --http-uwsgi-temp
--path=temp/uwsgi_temp --with-cc-opt=-DFD_SETSIZE=1024 --with-pcre=objs/lib/pcre-
-8.40 --with-zlib=objs/lib/zlib-1.2.11 --with-select_module --with-http_realip_mo
-dule --with-http_addition_module --with-http_sub_module --with-http_dav_module -
--with-http_stub_status_module --with-http_flv_module --with-http_mp4_module --wi
-th-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_mo
-dule --with-http_random_index_module --with-http_secure_link_module --with-http_
-slice_module --with-mail --with-stream --with-openssl=objs/lib/openssl-1.1.0e --
-with-openssl-opt=no-asm --with-http_ssl_module --with-mail_ssl_module --with-str
-eam_ssl_module --with-ipv6 --add-module=../nginx-rtmp-module
+configure arguments: --with-cc=gcc --builddir=objs_x86 --prefix= --sbin-path=nginx.exe --http-client-body-temp-path=temp/client_body_temp --http-proxy-temp-path=temp/proxy_temp --http-fastcgi-temp-path=temp/fastcgi_temp --http-scgi-temp-path=temp/scgi_temp --http-uwsgi-temp-path=temp/uwsgi_temp --with-cc-opt=-DFD_SETSIZE=4096 --with-select_module --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_stub_status_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-http_secure_link_module --with-http_slice_module --with-mail --with-stream --with-http_ssl_module --with-mail_ssl_module --with-stream_ssl_module --add-module=modules/nginx-rtmp-module
 ```
 
 ## 使用方法
@@ -41,32 +30,24 @@ HTTP监听 8080 端口，
 * :8080/vod.html 为一个支持RTMP和HLS点播的测试器
 
 ## H.265
-支持ID为12的H.265直播流
+RTMP支持ID为12的H.265直播流
 
-## 实时转码
-nginx-rtmp-module在Linux平台支持exec来调用ffmpeg进行实时转码.windows平台由于原作者没有去实现所以不支持exec.  
-不过即使是使用ffmpeg转码,其实也存在很大的延迟,这是由于ffmpeg打开直播型输入流时需要花很多时间去做分析.  
-NodeMedia使用独家优化的转码技术,直接内置于nginx服务内.实现了不限平台的实时转码实现(Linux版后期提供).  
-目前第一版,支持任意音频编码转码为AAC,可控制转码后的采样率,声道,比特率.主要用于当使用Flash作为推流端时,只能使用SPEEX和NELLYMOSER编码,无法为HLS提供音频流的缺陷. 推荐Flash在推流时使用44100的nellymoser编码.
-
+## 低延迟实时转码
+原版Rtmp-Module不支持Windows下exec调用，NMS版本嵌入ffmpeg，直接传入ffmpeg指令进行转码
+* 支持使用$app,$name变量
+* 转码后可以输出到本app
+* 支持多路输出
+* 支持qsv,cuvid硬解码
+* 支持qsv,nvenc硬编码(nvenc硬编码会话数受限于显卡型号，一般GeForce家用显卡最多支持2路)
+* 支持转码为H.265 RTMP流，需客户端支持,ID为12
 ```
  application live {
     live on;
     
-    transcode on;           #转码开关
-    transcode_appname hls;  #转码后的 app name
-    transcode_ar 44100;     #转码后的采样率
-    transcode_ab 128000;    #转码后的比特率
-    transcode_ac 1;         #转码后的声道数
+    transcode "-i rtmp://127.0.0.1/$app/$name -c:a libfdk_aac -profile:a aac_he -ab 32k -c:v copy -f flv rtmp://127.0.0.1/$app/$name_aac";
 }
-
-
 ```
-## 后续版本或将增加
- * 实时视频转码
- * NVENC/NVDEC/Intel QSV加速
- * 多分辨率输出
- * H.264 -> H.265 转码
+
 
 ## 播放防盗链与推流鉴权
 ### 加密 URL 构成:
@@ -110,6 +91,6 @@ NodeMedia使用独家优化的转码技术,直接内置于nginx服务内.实现�
 源码在此:https://github.com/NodeMedia/NodeMediaDevClient  
 
 ## Flash推流插件
-仅5K大小的flash推流插件，ActionScript3开发  
-https://github.com/NodeMedia/NodeMediaClient-Web  
+仅5K大小的flash推流插件，ActionScript3开发
+https://github.com/NodeMedia/NodeMediaClient-Web  
 可直接嵌入web项目使用
