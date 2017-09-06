@@ -121,3 +121,6 @@ RTMP支持ID为12的H.265直播流
 仅5K大小的flash推流插件，ActionScript3开发
 https://github.com/NodeMedia/NodeMediaClient-Web  
 可直接嵌入web项目使用
+
+## 跨平台开源流媒体服务端(另一个选择)
+Node-Media-Server 基于Node.JS开发, 跨平台/高性能, 支持RTMP协议推流,RTMP/HTTP-FLV/WebSocket-FLV播放, 内置推流鉴权/播放防盗链/GOP缓存急速秒开.
