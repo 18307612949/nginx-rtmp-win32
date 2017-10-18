@@ -7,12 +7,12 @@ NMS分支为功能加强版，如需使用原版，请切换master分支。新�
 * openssl-1.0.2l  
 * pcre-8.41  
 * zlib-1.2.11  
-* ffmpeg-3.3.2  
+* ffmpeg-3.3.4  
 
 ## configure arguments
 ```
 nginx version: nginx/1.13.3
-built by gcc 7.1.0 (Rev2, Built by MSYS2 project)
+built by gcc 7.2.0 (Rev2, Built by MSYS2 project)
 built with OpenSSL 1.0.2l  25 May 2017
 TLS SNI support enabled
 configure arguments: --with-cc=gcc --builddir=objs_x86 --prefix= --sbin-path=nginx.exe --http-client-body-temp-path=temp/client_body_temp --http-proxy-temp-path=temp/proxy_temp --http-fastcgi-temp-path=temp/fastcgi_temp --http-scgi-temp-path=temp/scgi_temp --http-uwsgi-temp-path=temp/uwsgi_temp --with-cc-opt=-DFD_SETSIZE=4096 --with-select_module --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_stub_status_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-http_secure_link_module --with-http_slice_module --with-mail --with-stream --with-http_ssl_module --with-mail_ssl_module --with-stream_ssl_module --add-module=modules/nginx-rtmp-module
@@ -51,7 +51,7 @@ RTMP支持ID为12的H.265直播流
 ```
 
 ```
-#音频流不变，视频流实时转为多路分辨率，用于大专小，一转多
+#音频流不变，视频流实时转为多路分辨率，用于大转小，一转多
  application live {
     live on;
     
@@ -60,7 +60,7 @@ RTMP支持ID为12的H.265直播流
 ```
 
 ```
-#音频流不变，视频流实时转为多路分辨率，用于大专小，一转多,使用NV显卡加速解码减轻CPU负担
+#音频流不变，视频流实时转为多路分辨率，用于大转小，一转多,使用NV显卡加速解码减轻CPU负担
  application live {
     live on;
     
@@ -101,13 +101,14 @@ RTMP支持ID为12的H.265直播流
 应该由业务服务器生成安全的URL,防止在客户端泄漏key.可参考auth_gen.php
 
 ## 后续版本或将增加
-* static_transcode 可用于输入RTSP摄像头数据流转RTMP流
-* flv文件录制后调用内置ffmpeg转换为MP4文件格式并添加faststart标识
+* gop_cache
+* remux to http_flv/websocket_flv
+* flv文件录制后调用内置ffmpeg转换为MP4文件格式并添加faststart标识，或直接存为mp4文件
 * 精简ffmpeg编解码器，减小程序体积 
-* NMS的Linux版
 * 64位版，经测试视频编码器性能更强
 * npp加速的视频缩放滤镜 
-* 你提
+* 不使用Unix_socket实现auto_push以利用多核
+* 定制开发请邮件联系本人 illuspas[at]gmail.com
 
 ## 注意
 不支持exec
